@@ -1,12 +1,13 @@
 import { View, SafeAreaView, ScrollView, StatusBar, BackHandler, Alert } from 'react-native';
 
 import { COLORS, SIZES } from '../../constants/theme';
-import { Welcome, HealthReadings, LatestReport } from '../../components';
+import { Welcome, HealthReadings, DietPlan, LatestReport, CheckHealth } from '../../components';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { useFocusEffect, useRouter } from 'expo-router';
+import PredictionInputs from '../../components/home/PredictionInputs';
 
 const Home = () => {
 
@@ -62,8 +63,8 @@ const Home = () => {
         <View style={{ flex: 1, padding: SIZES.medium, paddingTop: 40 }}>
 
           <Welcome username={userData.name} />
-          <HealthReadings />
-          <LatestReport />
+          <CheckHealth />
+          <DietPlan />
         </View>
       </ScrollView>
     </SafeAreaView>

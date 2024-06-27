@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router'
 import { COLORS, FONT, SIZES } from '../constants/theme';
 import styles from '../constants/style';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCalendarDays, faCircleCheck, faRulerVertical, faWeightScale } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays, faCircleCheck, faDumbbell, faRulerVertical, faWeightScale } from '@fortawesome/free-solid-svg-icons';
 
 import maleIcon from '../assets/icon/male.png';
 import femaleIcon from '../assets/icon/female.png';
@@ -11,6 +11,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import Btn from '../components/Btn';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker } from '@react-native-picker/picker';
+import CustomDropdown from '../components/CustomDropdown';
 
 const GenderOption = ({ gender, srcImg, selectedGender, handleGenderSelect }) => {
   return (
@@ -50,6 +52,7 @@ const Yourdetails = () => {
   const [age, setAge] = useState(null);
   const [weight, setWeight] = useState(null);
   const [height, setHeight] = useState(null);
+  const [activityLevel, setActivityLevel] = useState(null);
 
   const handleGenderSelect = (gender) => {
     setSelectedGender(gender);
@@ -63,23 +66,26 @@ const Yourdetails = () => {
       age: age,
       weight: weight,
       height: height,
+      activityLevel: activityLevel,
       token: token,
     }
 
-    if (selectedGender && age && weight && height) {
+    if (selectedGender && age && weight && height && activityLevel) {
       axios.post("http://192.168.2.108:5001/submitpersonalinfo", userData)
-      .then(response => {
-        console.log('User information submitted:', response.data);
-        route.push('/home');
-      })
-      .catch(error => {
-        console.error('Error submitting user information:', error);
-        Alert.alert("Error submitting user information!");
-      });
+        .then(response => {
+          console.log('User information submitted:', response.data);
+          route.push('/home');
+        })
+        .catch(error => {
+          console.error('Error submitting user information:', error);
+          Alert.alert("Error submitting user information!");
+        });
     } else {
       Alert.alert("Please fill out all fields.");
     }
   }
+
+  console.log(activityLevel);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white, paddingTop: StatusBar.currentHeight }}>
@@ -120,7 +126,15 @@ const Yourdetails = () => {
             onChange={(e) => setHeight(e.nativeEvent.text)}
           />
 
-          <Btn btnTitle={"Continue"} onPress={() => handleSubmit()} />
+          {/* SELECT ACTIVITY LEVEL */}
+          <CustomDropdown
+            infoHead={"Activity Level"}
+            infoIcon={faDumbbell}
+            selectedValue={activityLevel}
+            onValueChange={(itemValue) => setActivityLevel(itemValue)}
+          />
+
+          <Btn customeStyleBtn={{ marginTop: 30 }} btnTitle={"Continue"} onPress={() => handleSubmit()} />
 
         </View>
       </ScrollView>

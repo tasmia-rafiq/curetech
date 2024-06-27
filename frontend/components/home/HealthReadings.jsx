@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
 
-import styles from "./healthReadings.style";
+import styles from "./home.style";
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faDroplet } from "@fortawesome/free-solid-svg-icons";
 
-import { COLORS } from "../../../constants/theme";
+import { COLORS } from "../../constants/theme";
 
 const HealthReadings = () => {
   return (

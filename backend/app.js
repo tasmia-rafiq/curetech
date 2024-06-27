@@ -6,6 +6,9 @@ require('./Schemas/UserDetails');
 require('./Schemas/UserPersonalInfo');
 const jwt = require("jsonwebtoken");
 app.use(express.json());
+const { PythonShell } = require('python-shell');
+
+const { logisticRegressionPredict } = require('./ml_model.js');
 
 const User = mongoose.model("UserInfo");
 const UserPersonalInfo = mongoose.model("UserPersonalInfo");
@@ -91,7 +94,7 @@ app.post('/userdata', async (req, res) => {
 
 // user Information submission
 app.post('/submitpersonalinfo', async (req, res) => {
-    const { gender, age, weight, height, token } = req.body;
+    const { gender, age, weight, height, activityLevel, token } = req.body;
     try {
         const user = jwt.verify(token, JWT_SECRET);
         const userEmail = user.email;
@@ -105,6 +108,7 @@ app.post('/submitpersonalinfo', async (req, res) => {
                 age: age,
                 weight: weight,
                 height: height,
+                activityLevel: activityLevel,
             });
             await userPersonalInfo.save();
 
@@ -127,7 +131,7 @@ app.post('/userpersonaldata', async (req, res) => {
 
         const userInfo = await User.findOne({ email: userEmail });
 
-        if(userInfo) {
+        if (userInfo) {
             const userPersonalInfo = await UserPersonalInfo.findOne({ user: userInfo._id });
             if (userPersonalInfo) {
                 return res.send({ status: "ok", data: userPersonalInfo });
@@ -142,6 +146,38 @@ app.post('/userpersonaldata', async (req, res) => {
     }
 });
 
+// Route for model prediction
+// app.post('/predict', async (req, res) => {
+//     try {
+//         console.log('Prediction request received');
+//         const inputData = req.body; // Assuming input data is sent in the request body
+//         const prediction = await logisticRegressionPredict(inputData); // Make prediction using your model
+//         console.log('Prediction:', prediction);
+//         res.send({ prediction });
+//     } catch (error) {
+//         console.error('Prediction failed:', error);
+//         res.status(500).send({ error: 'Prediction failed' });
+//     }
+// });
+
+app.post('/predict', async (req, res) => {
+    try {
+        console.log('Prediction request received');
+        const inputData = req.body; // Assuming input data is sent in the request body
+        PythonShell.run('predict.py', { args: [JSON.stringify(inputData)] }, (err, results) => {
+            if (err) {
+                console.error('Error executing Python script:', err);
+                return res.status(500).json({ error: 'An error occurred while making predictions' });
+            }
+
+            const prediction = JSON.parse(results[0]); // Parse the result from the Python script
+            return res.json({ prediction });
+        });
+    } catch (error) {
+        console.error('Prediction failed:', error);
+        res.status(500).send({ error: 'Prediction failed' });
+    }
+});
 
 // defining port
 app.listen(5001, () => {

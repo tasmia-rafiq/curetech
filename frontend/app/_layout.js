@@ -18,6 +18,8 @@ const Layout = () => {
         <Stack.Screen name='(tabs)' />
         <Stack.Screen name='index' />
         <Stack.Screen name='signin' />
+        <Stack.Screen name='meal-plan' options={{ title: 'Meal Plan' }} />
+        <Stack.Screen name='workout-plan' options={{ title: 'Meal Plan' }} />
     </Stack>
   )
 }

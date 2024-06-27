@@ -1,12 +1,13 @@
 import { Tabs } from 'expo-router';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faHeartCirclePlus, faHomeAlt, faPieChart, faUser } from '@fortawesome/free-solid-svg-icons';
 
 import { COLORS, FONT, SIZES } from '../../constants/theme';
 
 
 const TabsLayout = () => {
-    const renderTabBarIcon = (name, focused) => {
-        return <Icon name={name} color={focused ? COLORS.blue : COLORS.grey} size={SIZES.xLarge} />;
+    const renderTabBarIcon = (icon, focused) => {
+        return <FontAwesomeIcon icon={icon} color={focused ? COLORS.blue : COLORS.grey} size={SIZES.xLarge} />;
     };
 
     return (
@@ -31,26 +32,27 @@ const TabsLayout = () => {
                 options={{
                     tabBarLabel: 'Home',
                     headerShown: false,
-                    tabBarIcon: ({ focused }) => renderTabBarIcon('home', focused),
-                    tabBarActiveTintColor: COLORS.blue,
-                }}
-            />
-            <Tabs.Screen
-                name='report'
-                options={{
-                    tabBarLabel: 'Report',
-                    headerShown: false,
-                    tabBarIcon: ({ focused }) => renderTabBarIcon('pie-chart', focused),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(faHomeAlt, focused),
                     tabBarActiveTintColor: COLORS.blue,
                 }}
             />
 
             <Tabs.Screen
-                name='notification'
+                name='health-status'
                 options={{
-                    tabBarLabel: 'Notification',
+                    tabBarLabel: 'Health',
                     headerShown: false,
-                    tabBarIcon: ({ focused }) => renderTabBarIcon('bell', focused),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(faHeartCirclePlus, focused),
+                    tabBarActiveTintColor: COLORS.blue,
+                }}
+            />
+
+            <Tabs.Screen
+                name='report'
+                options={{
+                    tabBarLabel: 'Report',
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(faPieChart, focused),
                     tabBarActiveTintColor: COLORS.blue,
                 }}
             />
@@ -59,7 +61,7 @@ const TabsLayout = () => {
                 name='profile'
                 options={{
                     tabBarLabel: 'Profile',
-                    tabBarIcon: ({ focused }) => renderTabBarIcon('user', focused),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(faUser, focused),
                     tabBarActiveTintColor: COLORS.blue,
                 }}
             />

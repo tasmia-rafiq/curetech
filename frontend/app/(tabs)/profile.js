@@ -5,14 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft, faArrowRightFromBracket, faCircleInfo, faComment, faFileMedical } from '@fortawesome/free-solid-svg-icons';
 
 import { ProfileCard, ProfileOptions } from '../../components';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useUserData from '../../hooks/useUserData';
+import useUserPersonalData from '../../hooks/useUserPersonalData';
 
 const Profile = () => {
   const route = useRouter();
   const userData = useUserData();
+  const userPersonalData = useUserPersonalData();
 
   const logout = () => {
     AsyncStorage.setItem('isLoggedIn', '');
@@ -42,7 +42,7 @@ const Profile = () => {
         }}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ProfileCard username={userData.name} />
+        <ProfileCard username={userData.name} gender={userPersonalData.gender} />
 
         <View style={{ paddingHorizontal: 40, paddingVertical: 30, gap: 15 }}>
           <ProfileOptions title={"Your Details"} leftIcon={faCircleInfo} onPress={() => route.push('/account')} />

@@ -6,6 +6,7 @@ const UserPersonalInfoSchema = new mongoose.Schema({
     age: Number,
     weight: Number,
     height: Number,
+    activityLevel: String,
 }, {
     collection: "UserPersonalInfo"
 });

@@ -166,6 +166,30 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 48,
     },
+
+    //FOR MEAL PLAN PAGE
+    header: {
+        fontFamily: FONT.medium,
+        fontSize: SIZES.xLarge,
+        paddingVertical: 10,
+        paddingBottom: 20,
+    },
+    calorie: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    calorieVal: {
+        fontFamily: FONT.medium,
+        fontSize: SIZES.medium,
+        paddingBottom: 5,
+    },
+    calorieText: {
+        fontFamily: FONT.regular,
+        fontSize: SIZES.font14,
+        
+    }
 });
 
 export default styles;
