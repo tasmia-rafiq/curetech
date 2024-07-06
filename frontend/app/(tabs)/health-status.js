@@ -142,21 +142,34 @@ const HealthStatus = () => {
         });
     }
 
-    const handlePredict = () => {
-        axios
-            .post("http://192.168.2.108:5000/predict", data)
-            .then((response) => {
-                const result = response.data.probability;
-                console.log("Probability:", result);
+    const validateForm = () => {
+        for (let key in data) {
+            if (data[key] === "") {
+                return false;
+            }
+        }
+        return true;
+    }
 
-                setPrediction(result);
-                setModalVisible(true);
-                resetForm();
-            })
-            .catch((error) => {
-                console.error("Error making prediction:", error);
-                setPrediction("Failed to get prediction");
-            });
+    const handlePredict = () => {
+        if (validateForm()) {
+            axios
+                .post("http://192.168.2.108:5000/predict", data)
+                .then((response) => {
+                    const result = response.data.probability;
+                    console.log("Probability:", result);
+
+                    setPrediction(result);
+                    setModalVisible(true);
+                    resetForm();
+                })
+                .catch((error) => {
+                    console.error("Error making prediction:", error);
+                    setPrediction("Failed to get prediction");
+                });
+        } else {
+            Alert.alert("Error", "Please fill all the fields.");
+        }
     }
 
     // Data for activity level

@@ -47,7 +47,7 @@ const SignIn = () => {
             })
             .catch(error => console.log(error));
           } else {
-            Alert.alert(JSON.stringify(res.data));
+            Alert.alert("User does not exist.");
           }
         }).catch((e) => console.log(e));
     } else {

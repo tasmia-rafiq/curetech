@@ -1,15 +1,31 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 import styles from "./home.style";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { COLORS, SIZES } from "../../constants/theme";
 
-const Welcome = ({ username }) => {
+const Welcome = ({ username, onPress }) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { flexDirection: "row", justifyContent: "space-between" },
+      ]}
+    >
       <View>
         <Text style={styles.welcomeMessage}>Hello,</Text>
         <Text style={styles.userName}>{username}</Text>
+      </View>
+
+      <View>
+        <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
+          <FontAwesomeIcon
+            icon={faBell}
+            size={SIZES.xLarge}
+            color={COLORS.blue}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* <View style={styles.warningContainer}>

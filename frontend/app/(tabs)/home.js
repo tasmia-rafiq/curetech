@@ -62,7 +62,7 @@ const Home = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ flex: 1, padding: SIZES.medium, paddingTop: 40 }}>
 
-          <Welcome username={userData.name} />
+          <Welcome username={userData.name} onPress={() => route.push('notifications')} />
           <CheckHealth />
           <DietPlan />
         </View>

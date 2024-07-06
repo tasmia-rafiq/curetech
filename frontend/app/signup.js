@@ -36,7 +36,13 @@ const SignUp = () => {
             Alert.alert("Registered Succesfully!");
             route.push('/signin');
           } else {
-            Alert.alert(JSON.stringify(res.data));
+            // Alert.alert("User Already Exists!");
+            Toast.show({
+              type: 'error',
+              text1: 'Registration Failed!',
+              text2: 'User Already Exists.',
+              visibilityTime: 5000,
+            })
           }
         })
         .catch((e) => console.log(e));
@@ -81,7 +87,7 @@ const SignUp = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={"always"} style={{  paddingTop: StatusBar.currentHeight }}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={"always"} style={{ paddingTop: StatusBar.currentHeight }}>
         <View style={styles.container}>
 
           <Toast config={ToastConfig} />

@@ -85,6 +85,12 @@ const Yourdetails = () => {
     }
   }
 
+  const data = [
+    { label: 'Sedentary', value: 'Sedentary' },
+    { label: 'Moderately Active', value: 'Moderately Active' },
+    { label: 'Active', value: 'Active' },
+  ]
+
   console.log(activityLevel);
 
   return (
@@ -128,9 +134,11 @@ const Yourdetails = () => {
 
           {/* SELECT ACTIVITY LEVEL */}
           <CustomDropdown
+            placeholder={"Set activity level"}
             infoHead={"Activity Level"}
             infoIcon={faDumbbell}
             selectedValue={activityLevel}
+            data={data}
             onValueChange={(itemValue) => setActivityLevel(itemValue)}
           />
 
