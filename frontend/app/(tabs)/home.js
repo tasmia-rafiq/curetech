@@ -1,13 +1,13 @@
-import { View, SafeAreaView, ScrollView, StatusBar, BackHandler, Alert } from 'react-native';
+import { View, SafeAreaView, ScrollView, StatusBar, BackHandler, Alert, TouchableOpacity, Text } from 'react-native';
 
-import { COLORS, SIZES } from '../../constants/theme';
-import { Welcome, HealthReadings, DietPlan, LatestReport, CheckHealth } from '../../components';
+import { COLORS, FONT, SIZES } from '../../constants/theme';
+import { Welcome, DietPlan, CheckHealth } from '../../components';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { useFocusEffect, useRouter } from 'expo-router';
-import PredictionInputs from '../../components/home/PredictionInputs';
+import Btn from '../../components/Btn';
 
 const Home = () => {
 
@@ -65,6 +65,11 @@ const Home = () => {
           <Welcome username={userData.name} onPress={() => route.push('notifications')} />
           <CheckHealth />
           <DietPlan />
+
+          <View style={{ alignItems: 'center', marginTop: -40, paddingHorizontal: 20, marginBottom: 60, backgroundColor: "#faf7ff", paddingVertical: 30, borderRadius: 10, }}>
+            <Text style={{ fontFamily: FONT.medium, fontSize: SIZES.xLarge, lineHeight: 26, textAlign: 'center', paddingBottom: 20 }}>Is your health status poor? Get Medical Assistance now!</Text>
+            <Btn btnTitle={"Visit a Doctor"} onPress={() => route.push('/medical-assistance')} />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

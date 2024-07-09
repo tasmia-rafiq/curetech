@@ -8,7 +8,7 @@ const DietPlan = () => {
     route.push(target);
   }
   return (
-    <View style={{ height: '50%', alignItems: 'center', justifyContent: 'center', padding: 50 }}>
+    <View style={{ height: '43%', alignItems: 'center', justifyContent: 'center', padding: 50 }}>
       <CarouselCards onPress={handlePress} />
     </View>
   );

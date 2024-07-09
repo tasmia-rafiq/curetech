@@ -154,7 +154,7 @@ const HealthStatus = () => {
     const handlePredict = () => {
         if (validateForm()) {
             axios
-                .post("http://192.168.2.108:5000/predict", data)
+                .post("http://192.168.19.8:5000/predict", data)
                 .then((response) => {
                     const result = response.data.probability;
                     console.log("Probability:", result);

@@ -24,15 +24,15 @@ const styles = StyleSheet.create({
         marginBottom: 30,
     },
     btn: {
-       color: COLORS.black,
-       backgroundColor: COLORS.blue,
-       borderRadius: 32,
-       borderColor: COLORS.blue,
-       borderWidth: 1,
-       paddingVertical: 16,
-       width: 250,
-       alignItems: 'center'
-       
+        color: COLORS.black,
+        backgroundColor: COLORS.blue,
+        borderRadius: 32,
+        borderColor: COLORS.blue,
+        borderWidth: 1,
+        paddingVertical: 16,
+        width: 250,
+        alignItems: 'center'
+
     },
     btnText: {
         color: COLORS.white,
@@ -188,8 +188,34 @@ const styles = StyleSheet.create({
     calorieText: {
         fontFamily: FONT.regular,
         fontSize: SIZES.font14,
-        
-    }
+
+    },
+
+    //FOR EXERCISE PLAN PAGE
+    card: {
+        backgroundColor: COLORS.white,
+        borderRadius: 100,
+        paddingVertical: 35,
+        paddingHorizontal: 35,
+        marginVertical: 10,
+        width: '45%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 10,
+        shadowColor: '#000',
+    },
+    cardTitle: {
+        fontFamily: FONT.regular,
+        fontSize: SIZES.large,
+        color: COLORS.grey,
+        textAlign: 'center',
+        lineHeight: 22,
+    },
+    exerciseCard: {
+        backgroundColor: '#faf7ff',
+        borderRadius: 10,
+        width: "100%",
+    },
 });
 
 export default styles;

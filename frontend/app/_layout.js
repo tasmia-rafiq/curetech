@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { Text } from 'react-native';
+import { TimeProvider } from '../context/TimeContext';
 
 const Layout = () => {
   const [fontsLoaded] = useFonts({
@@ -9,19 +10,22 @@ const Layout = () => {
     DMBold: require('../assets/fonts/DMSans-Bold.ttf'),
   });
 
-  if(!fontsLoaded){
+  if (!fontsLoaded) {
     return <Text>Fonts not loaded</Text>;
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <TimeProvider>
+      <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name='(tabs)' />
         <Stack.Screen name='index' />
         <Stack.Screen name='signin' />
         <Stack.Screen name='meal-plan' options={{ title: 'Meal Plan' }} />
-        <Stack.Screen name='workout-plan' options={{ title: 'Meal Plan' }} />
-    </Stack>
-  )
-}
+        <Stack.Screen name='workout-plan' options={{ title: 'Workout Plan' }} />
+        <Stack.Screen name='medical-assistance' options={{ title: 'Medical Assistance' }} />
+      </Stack>
+    </TimeProvider>
+  );
+};
 
-export default Layout
+export default Layout;
