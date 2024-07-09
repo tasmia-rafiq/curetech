@@ -1,3 +1,4 @@
+import { IP_ADDRESS } from '@env';
 import { Link, useRouter } from 'expo-router';
 import { SafeAreaView, StatusBar, ScrollView, View, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
 import { COLORS, FONT, SIZES } from '../constants/theme';
@@ -29,7 +30,7 @@ const SignUp = () => {
     };
 
     if (name && email && password) {
-      axios.post('http://192.168.2.108:5001/register', userData)
+      axios.post(`${IP_ADDRESS}:5001/register`, userData)
         .then((res) => {
           console.log(res.data)
           if (res.data.status == "ok") {

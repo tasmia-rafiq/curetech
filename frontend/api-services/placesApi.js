@@ -1,6 +1,7 @@
+import { GOOGLE_API_KEY } from '@env';
 import axios from 'axios';
 
-const API_KEY = 'AIzaSyAAPdfAErX6yWW_B_atyPSCei817BxmgUI'; // Replace with your API key
+const API_KEY = GOOGLE_API_KEY; // Replace with your API key
 
 export const getNearbyPlaces = async (latitude, longitude, radius = 5000, type = 'hospital', opennow = 'true') => {
   const API_URL = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&opennow=${opennow}&key=${API_KEY}`;

@@ -1,3 +1,4 @@
+import { IP_ADDRESS } from '@env';
 import { View, SafeAreaView, ScrollView, StatusBar, BackHandler, Alert, TouchableOpacity, Text } from 'react-native';
 
 import { COLORS, FONT, SIZES } from '../../constants/theme';
@@ -17,7 +18,7 @@ const Home = () => {
     const token = await AsyncStorage.getItem("token");
     console.log(token);
 
-    axios.post("http://192.168.2.108:5001/userdata", { token: token }).then(res => {
+    axios.post(`${IP_ADDRESS}:5001/userdata`, { token: token }).then(res => {
       console.log(res.data)
       setUserData(res.data.data);
     });

@@ -1,4 +1,5 @@
-import { Link, Stack, useRouter } from 'expo-router';
+import { IP_ADDRESS } from '@env';
+import { Link, useRouter } from 'expo-router';
 import { SafeAreaView, StatusBar, ScrollView, View, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
 import { COLORS, FONT, SIZES } from '../constants/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -27,7 +28,7 @@ const SignIn = () => {
       password: password,
     };
     if (email && password) {
-      axios.post('http://192.168.2.108:5001/login', userData)
+      axios.post(`${IP_ADDRESS}:5001/login`, userData)
         .then(res => {
           console.log(res.data)
           if (res.data.status == "ok") {
@@ -35,7 +36,7 @@ const SignIn = () => {
             AsyncStorage.setItem("token", res.data.data); // storing the token
             AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
 
-            axios.post("http://192.168.2.108:5001/userdata", { token: res.data.data })
+            axios.post(`${IP_ADDRESS}:5001/userdata`, { token: res.data.data })
             .then(response => {
               const loginAttempts = response.data.data.loginAttempts;
               if (loginAttempts === 1) {

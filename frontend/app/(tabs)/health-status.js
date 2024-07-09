@@ -1,3 +1,4 @@
+import { IP_ADDRESS } from '@env';
 import { View, Text, SafeAreaView, StatusBar, ScrollView, TouchableOpacity, Image, TextInput, Alert, Modal } from 'react-native';
 import { useRouter } from 'expo-router'
 import { COLORS, FONT, SIZES } from '../../constants/theme';
@@ -154,7 +155,7 @@ const HealthStatus = () => {
     const handlePredict = () => {
         if (validateForm()) {
             axios
-                .post("http://192.168.19.8:5000/predict", data)
+                .post(`${IP_ADDRESS}:5000/predict`, data)
                 .then((response) => {
                     const result = response.data.probability;
                     console.log("Probability:", result);

@@ -6,16 +6,15 @@ require('./Schemas/UserDetails');
 require('./Schemas/UserPersonalInfo');
 const jwt = require("jsonwebtoken");
 app.use(express.json());
-const { PythonShell } = require('python-shell');
 
-const { logisticRegressionPredict } = require('./ml_model.js');
+require('dotenv').config();
 
 const User = mongoose.model("UserInfo");
 const UserPersonalInfo = mongoose.model("UserPersonalInfo");
 
-const mongoURL = "mongodb+srv://curetechapplication:wAhwlpB7cE2IwO5f@cluster0.w77qkrj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const mongoURL = process.env.MONGO_URL;
 
-const JWT_SECRET = "kK6fh9h5efFkXLimCqdUYwjSqvHFYKELF1UfUAgD4vPnxgvMaj(/q4GrrA1cmiLHxZKRvpePnDWRHQgnZr1jjmMdBGzPB$Mk5nmy";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 mongoose.connect(mongoURL).then(() => {
     console.log("Database Connected");
@@ -146,38 +145,6 @@ app.post('/userpersonaldata', async (req, res) => {
     }
 });
 
-// Route for model prediction
-// app.post('/predict', async (req, res) => {
-//     try {
-//         console.log('Prediction request received');
-//         const inputData = req.body; // Assuming input data is sent in the request body
-//         const prediction = await logisticRegressionPredict(inputData); // Make prediction using your model
-//         console.log('Prediction:', prediction);
-//         res.send({ prediction });
-//     } catch (error) {
-//         console.error('Prediction failed:', error);
-//         res.status(500).send({ error: 'Prediction failed' });
-//     }
-// });
-
-app.post('/predict', async (req, res) => {
-    try {
-        console.log('Prediction request received');
-        const inputData = req.body; // Assuming input data is sent in the request body
-        PythonShell.run('predict.py', { args: [JSON.stringify(inputData)] }, (err, results) => {
-            if (err) {
-                console.error('Error executing Python script:', err);
-                return res.status(500).json({ error: 'An error occurred while making predictions' });
-            }
-
-            const prediction = JSON.parse(results[0]); // Parse the result from the Python script
-            return res.json({ prediction });
-        });
-    } catch (error) {
-        console.error('Prediction failed:', error);
-        res.status(500).send({ error: 'Prediction failed' });
-    }
-});
 
 // defining port
 app.listen(5001, () => {

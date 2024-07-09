@@ -1,3 +1,4 @@
+import { IP_ADDRESS } from '@env';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,7 +10,7 @@ const useUserData = () => {
     const getData = async () => {
       const token = await AsyncStorage.getItem("token");
       if (token) {
-        axios.post("http://192.168.2.108:5001/userdata", { token: token })
+        axios.post(`${IP_ADDRESS}:5001/userdata`, { token: token })
           .then(res => {
             setUserData(res.data.data);
           })

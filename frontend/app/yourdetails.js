@@ -1,3 +1,4 @@
+import { IP_ADDRESS } from '@env';
 import { View, Text, SafeAreaView, StatusBar, ScrollView, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
 import { useRouter } from 'expo-router'
 import { COLORS, FONT, SIZES } from '../constants/theme';
@@ -71,7 +72,7 @@ const Yourdetails = () => {
     }
 
     if (selectedGender && age && weight && height && activityLevel) {
-      axios.post("http://192.168.2.108:5001/submitpersonalinfo", userData)
+      axios.post(`${IP_ADDRESS}:5001/submitpersonalinfo`, userData)
         .then(response => {
           console.log('User information submitted:', response.data);
           route.push('/home');
