@@ -4,14 +4,14 @@ import { useRouter } from 'expo-router'
 import { COLORS, FONT, SIZES } from '../../constants/theme';
 import styles from '../../constants/style';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCalendarDays, faCircleCheck, faClose, faCross, faDroplet, faDumbbell, faExclamationTriangle, faHeartPulse, faKitMedical, faRadiation, faRulerVertical, faSkullCrossbones, faSmoking, faWarning, faWeightScale, faWineBottle } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays, faCircleCheck, faClose, faDroplet, faDumbbell, faExclamationTriangle, faHeartPulse, faKitMedical, faRulerVertical, faSkullCrossbones, faSmoking, faWarning, faWeightScale, faWineBottle } from '@fortawesome/free-solid-svg-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import maleIcon from '../../assets/icon/male.png';
 import femaleIcon from '../../assets/icon/female.png';
 import { useState } from 'react';
 import axios from 'axios';
 import Btn from '../../components/Btn';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomDropdown from '../../components/CustomDropdown';
 
 const GenderOption = ({ gender, srcImg, selectedGender, handleGenderSelect }) => {
@@ -48,7 +48,7 @@ const InformationInput = ({ infoHead, infoIcon, placeholder, onChangeText, value
     );
 }
 
-const PredictionModal = ({ visible, prediction, onClose }) => {
+const PredictionModal = ({ visible, prediction, onClose, onPress }) => {
     const isSafe = prediction < 30;
     const warningMessage = isSafe
         ? "Your health status is relatively safe."
@@ -86,7 +86,7 @@ const PredictionModal = ({ visible, prediction, onClose }) => {
                         <FontAwesomeIcon icon={faWarning} size={SIZES.medium} color={COLORS.yellow} style={{ marginTop: 4 }} />
                         <Text style={{ fontSize: SIZES.medium, fontFamily: FONT.medium, color: COLORS.grey }}>Consult a Doctor now and follow a balanced Diet Plan!</Text>
                     </View>
-                    <Btn onPress={() => { }} btnTitle={'View Your Report'} customeStyleBtn={{ width: '100%' }} />
+                    <Btn onPress={onPress} btnTitle={'View Your Report'} customeStyleBtn={{ width: '100%' }} />
                 </View>
             </View>
         </Modal>
@@ -152,26 +152,67 @@ const HealthStatus = () => {
         return true;
     }
 
-    const handlePredict = () => {
+    const handlePredict = async () => {
         if (validateForm()) {
-            axios
-                .post(`${IP_ADDRESS}:5000/predict`, data)
-                .then((response) => {
-                    const result = response.data.probability;
-                    console.log("Probability:", result);
+            try {
+                const response = await axios.post(`${IP_ADDRESS}:5000/predict`, data);
+                const result = response.data.probability;
+                console.log("Probability:", result);
 
-                    setPrediction(result);
-                    setModalVisible(true);
-                    resetForm();
-                })
-                .catch((error) => {
-                    console.error("Error making prediction:", error);
-                    setPrediction("Failed to get prediction");
-                });
+                setPrediction(result);
+                setModalVisible(true);
+                resetForm();
+
+                await saveReportToDatabase(result);
+            } catch (error) {
+                console.error("Error making prediction:", error);
+                setPrediction("Failed to get prediction");
+            }
         } else {
             Alert.alert("Error", "Please fill all the fields.");
         }
-    }
+    };
+
+    const saveReportToDatabase = async (prediction) => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const reportData = {
+                prediction: prediction,
+                data: data,
+                token: token,
+            };
+
+            await axios.post(`${IP_ADDRESS}:5001/savereport`, reportData);
+            console.log('Report Saved');
+        } catch (error) {
+            console.error('Error saving report:', error);
+        }
+    };
+
+    const navigateToReportDetails = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) {
+                throw new Error('User token not found');
+            }
+    
+            const response = await axios.get(`${IP_ADDRESS}:5001/latestreport`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+    
+            const latestReport = response.data.report;
+            console.log("latestreport: ", latestReport);
+    
+            route.push({
+                pathname: 'report-details',
+                params: { report: JSON.stringify(latestReport) }
+            });
+        } catch (error) {
+            console.error('Error fetching the latest report:', error);
+            Alert.alert("Error", "An error occurred while fetching the latest report.");
+        }
+    };
+
 
     // Data for activity level
     const activityLevelData = [
@@ -310,6 +351,7 @@ const HealthStatus = () => {
                         visible={modalVisible}
                         prediction={prediction}
                         onClose={() => setModalVisible(false)}
+                        onPress={navigateToReportDetails}
                     />
 
                 </View>

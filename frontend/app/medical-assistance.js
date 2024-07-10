@@ -170,14 +170,32 @@ const MedicalAssistanceScreen = () => {
           return;
         }
 
-        const loc = await Location.getCurrentPositionAsync({});
-        const { latitude, longitude } = loc.coords;
-        setLocation({ latitude, longitude });
+        await getLocationWithRetry();
       } catch (error) {
         console.error('Error requesting location permissions or retrieving location:', error);
         Alert.alert('Error', 'Failed to get current location. Please try again.');
       } finally {
         setLoading(false);
+      }
+    };
+
+    const getLocationWithRetry = async (retries = 3) => {
+      let loc = null;
+      for (let i = 0; i < retries; i++) {
+        try {
+          loc = await Location.getCurrentPositionAsync({});
+          if (loc) break;
+        } catch (error) {
+          console.warn('Retrying to get location...', error);
+        }
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds before retrying
+      }
+
+      if (loc) {
+        const { latitude, longitude } = loc.coords;
+        setLocation({ latitude, longitude });
+      } else {
+        Alert.alert('Error', 'Failed to get current location after multiple attempts. Please try again.');
       }
     };
 

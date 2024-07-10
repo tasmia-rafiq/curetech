@@ -7,7 +7,7 @@ import {
   faSquarePollHorizontal,
 } from "@fortawesome/free-solid-svg-icons";
 
-const GeneralTab = ({ day, report, time, onPress }) => {
+const GeneralTab = ({ report, time, onPress }) => {
   return (
     <View
       style={{
@@ -15,23 +15,10 @@ const GeneralTab = ({ day, report, time, onPress }) => {
         justifyContent: "flex-start",
         alignItems: "flex-start",
         paddingHorizontal: 20,
-        paddingTop: 20,
+        paddingBottom: 20,
       }}
     >
       <View style={{ width: "100%" }}>
-        {day && (
-          <Text
-            style={{
-              fontSize: SIZES.font14,
-              color: COLORS.grey,
-              fontFamily: FONT.regular,
-              marginBottom: 10,
-            }}
-          >
-            {day}
-          </Text>
-        )}
-
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={onPress}

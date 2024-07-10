@@ -46,7 +46,7 @@ const Profile = () => {
 
         <View style={{ paddingHorizontal: 40, paddingVertical: 30, gap: 15 }}>
           <ProfileOptions title={"Your Details"} leftIcon={faCircleInfo} onPress={() => route.push('/account')} />
-          <ProfileOptions title={"My Reports"} leftIcon={faFileMedical} onPress={() => {}} />
+          <ProfileOptions title={"My Reports"} leftIcon={faFileMedical} onPress={() => route.push('/report')} />
           <ProfileOptions title={"FAQs"} leftIcon={faComment} onPress={() => {}} />
           <ProfileOptions title={"Logout"} leftIcon={faArrowRightFromBracket} onPress={() => logout()} />
         </View>

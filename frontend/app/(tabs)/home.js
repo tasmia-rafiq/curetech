@@ -69,7 +69,7 @@ const Home = () => {
 
           <View style={{ alignItems: 'center', marginTop: -40, paddingHorizontal: 20, marginBottom: 60, backgroundColor: "#faf7ff", paddingVertical: 30, borderRadius: 10, }}>
             <Text style={{ fontFamily: FONT.medium, fontSize: SIZES.xLarge, lineHeight: 26, textAlign: 'center', paddingBottom: 20 }}>Is your health status poor? Get Medical Assistance now!</Text>
-            <Btn btnTitle={"Visit a Doctor"} onPress={() => route.push('/medical-assistance')} />
+            <Btn btnTitle={"Look for nearby Hospitals"} onPress={() => route.push('/medical-assistance')} />
           </View>
         </View>
       </ScrollView>

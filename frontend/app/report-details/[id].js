@@ -1,25 +1,53 @@
-import React, { useRef } from 'react';
-import { View, SafeAreaView, ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { COLORS, FONT, SIZES } from '../constants/theme';
+import React, { useEffect, useState } from 'react';
+import { View, SafeAreaView, ScrollView, TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { COLORS, FONT, SIZES } from '../../constants/theme';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faArrowLeft, faDownload, faDroplet, faDumbbell, faHeartbeat, faKitMedical, faSmoking, faWineBottle } from '@fortawesome/free-solid-svg-icons';
-import StatusInput from '../components/report/StatusInput';
-import Btn from '../components/Btn';
-import useUserData from '../hooks/useUserData';
+import { faArrowLeft, faDroplet, faDumbbell, faHeartbeat, faKitMedical, faSmoking, faWineBottle } from '@fortawesome/free-solid-svg-icons';
+import StatusInput from '../../components/report/StatusInput';
+import useUserData from '../../hooks/useUserData';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IP_ADDRESS } from '@env';
 
 const ReportDetails = () => {
     const route = useRouter();
-    const { report } = useLocalSearchParams();
+    const { id } = useLocalSearchParams();
+    const [reportData, setReportData] = useState(null);
+    const [loading, setLoading] = useState(true);
     const userData = useUserData();
-    const scrollViewRef = useRef(null);
 
-    let reportData;
-    try {
-        reportData = JSON.parse(report);
-    } catch (error) {
-        console.error('Error parsing report data:', error);
+    useEffect(() => {
+        fetchReportData();
+    }, []);
+
+    const fetchReportData = async () => {
+        try {
+            const response = await fetch(`${IP_ADDRESS}:5001/report/${id}`);
+
+            if (response.ok) {
+                const data = await response.json();
+                setReportData(data.data);
+                console.log('reportData: ', reportData);
+            } else {
+                console.error('Failed to fetch report:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching report:', error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.white }}>
+                <ActivityIndicator size="large" color={COLORS.blue} />
+            </SafeAreaView>
+        );
+    }
+
+    if (!reportData || !userData) {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
                 <Text style={{ color: COLORS.red, textAlign: 'center', marginTop: 20 }}>
@@ -29,31 +57,26 @@ const ReportDetails = () => {
         );
     }
 
-    // Extract the data and prediction from the report
     const { data, prediction, createdAt } = reportData;
 
-    // Define a mapping for the activity level
     const activityLevelMap = {
         "0": "Sedentary",
         "1": "Moderate",
         "2": "Active"
     };
 
-    // Define a mapping for the cholesterol level
     const cholesterolLevelMap = {
         "1": "Normal",
         "2": "Above Normal",
         "3": "Well Above Normal"
     };
 
-    // Define a mapping for the glucose level
     const glucoseLevelMap = {
         "1": "Normal",
         "2": "Above Normal",
         "3": "Well Above Normal"
     };
 
-    // Format createdAt date
     const formattedCreatedAt = new Date(createdAt).toLocaleString('en-US', {
         day: 'numeric',
         month: 'long',
@@ -85,11 +108,7 @@ const ReportDetails = () => {
                     headerBackButtonMenuEnabled: false,
                 }}
             />
-            <ScrollView
-                ref={scrollViewRef}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ flexGrow: 1 }}
-            >
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{ padding: 20, paddingTop: 0 }}>
 
                     {/* USER DETAILS */}
@@ -162,17 +181,12 @@ const ReportDetails = () => {
 
                     <Text style={styles.title}>Your Condition</Text>
 
-                    {/* ALL INPUTS RECEIVED FROM HEALTH TAB AFTER SUBMIT */}
                     <StatusInput icon={faDroplet} statusName={'Blood Pressure'} value={`${data.ap_hi}/${data.ap_lo}`} unit={'mm/Hg'} />
                     <StatusInput icon={faDumbbell} statusName={'Activity Level'} value={activityLevelMap[data.active] || 'Unknown'} />
                     <StatusInput icon={faHeartbeat} statusName={'Cholesterol Level'} value={cholesterolLevelMap[data.cholesterol] || 'Unknown'} />
                     <StatusInput icon={faKitMedical} statusName={'Glucose Level'} value={glucoseLevelMap[data.gluc] || 'Unknown'} />
                     <StatusInput icon={faSmoking} statusName={'Smoking?'} value={data.smoke === "1" ? 'Yes' : 'No'} />
                     <StatusInput icon={faWineBottle} statusName={'Alcohol Intake?'} value={data.alco === "1" ? 'Yes' : 'No'} />
-
-                    <View>
-                        <Btn onPress={() => route.push('/report')} btnTitle={'View All Reports'} customeStyleBtn={{ margin: 'auto', marginTop: 10, }} />
-                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -189,7 +203,6 @@ const styles = StyleSheet.create({
     detailsTitle: {
         fontFamily: FONT.bold,
         fontSize: SIZES.medium,
-        paddingBottom: 5
     },
     detailsValue: {
         fontFamily: FONT.regular,
