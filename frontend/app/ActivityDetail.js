@@ -4,6 +4,8 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { COLORS, FONT, SIZES } from '../constants/theme';
 import ScrollPicker from "react-native-wheel-scrollview-picker";
 import { useTime } from '../context/TimeContext';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 
 const screen = Dimensions.get("window");
 
@@ -108,6 +110,16 @@ const ActivityDetail = () => {
             />
 
             <View style={styles.container}>
+                <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', padding: 40 }}>
+                    <View style={{padding: 7, backgroundColor: "#f1ebfc", borderRadius: 50}}>
+                        <FontAwesomeIcon icon={faLightbulb} size={SIZES.large} color={COLORS.lightPurple} />
+                    </View>
+                    <View style={styles.recommendationText}>
+                        <Text style={styles.totalTimeText}>Recommended three </Text>
+                        <Text style={[styles.totalTimeText, { fontFamily: FONT.bold, color: COLORS.purple }]}>10-minute </Text>
+                        <Text style={styles.totalTimeText}>{activity==="Walking" ? "Walks" : `${activity}`} a day</Text>
+                    </View>
+                </View>
                 {totalTime && (
                     <View style={styles.totalTime}>
                         <Text style={styles.totalTimeText}>
@@ -238,7 +250,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#faf7ff",
         padding: 20,
         borderRadius: 10,
-        marginBottom: 30,
+        marginBottom: 20,
     },
     totalTimeText: {
         textAlign: 'center',
@@ -246,6 +258,13 @@ const styles = StyleSheet.create({
         fontSize: SIZES.large,
         color: COLORS.blue,
     },
+    recommendationText: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        paddingRight: 20,
+    }
 });
 
 export default ActivityDetail;

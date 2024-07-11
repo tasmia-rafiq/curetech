@@ -207,15 +207,28 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontFamily: FONT.regular,
         fontSize: SIZES.large,
-        color: COLORS.grey,
+        color: COLORS.blue,
         textAlign: 'center',
-        lineHeight: 22,
+        lineHeight: 20,
+        paddingTop: 5
     },
     exerciseCard: {
         backgroundColor: '#faf7ff',
         borderRadius: 10,
         width: "100%",
     },
+    bannerText: {
+        fontFamily: FONT.regular,
+        fontSize: SIZES.medium,
+        color: COLORS.purple,
+        marginTop: -3
+    },
+    flex: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        gap: 10,
+        paddingBottom: 7
+    }
 });
 
 export default styles;
