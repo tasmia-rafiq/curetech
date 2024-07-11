@@ -7,7 +7,6 @@ import { faArrowLeft, faDroplet, faDumbbell, faHeartbeat, faKitMedical, faSmokin
 import StatusInput from '../../components/report/StatusInput';
 import useUserData from '../../hooks/useUserData';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IP_ADDRESS } from '@env';
 
 const ReportDetails = () => {

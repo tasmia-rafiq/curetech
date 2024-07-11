@@ -4,13 +4,18 @@ const TimeContext = createContext();
 
 export const TimeProvider = ({ children }) => {
     const [timeSpent, setTimeSpent] = useState(0);
+    const [exercisesDone, setExercisesDone] = useState(0);
 
     const updateTotalTime = (newTime) => {
-        setTimeSpent(prevTimeSpent => prevTimeSpent + newTime); // Use functional update to ensure correct state update
+        setTimeSpent(prevTimeSpent => prevTimeSpent + newTime);
+    };
+
+    const incrementExercisesDone = () => {
+        setExercisesDone((prevCount) => prevCount + 1);
     };
 
     return (
-        <TimeContext.Provider value={{ timeSpent, updateTotalTime }}>
+        <TimeContext.Provider value={{ timeSpent, setTimeSpent, exercisesDone, setExercisesDone, incrementExercisesDone, updateTotalTime }}>
             {children}
         </TimeContext.Provider>
     );
